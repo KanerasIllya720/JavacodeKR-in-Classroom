@@ -1,6 +1,6 @@
-package Á¦01Â÷½Ã;
+package ì œ01ì°¨ì‹œ;
 
-public class ½Ç½À01 {
+public class ì‹¤ìŠµ01 {
 
 	public static void main(String[] args) {
 		System.out.println("Hello, Welcome to Java World");

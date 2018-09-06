@@ -27,6 +27,7 @@ public class 실습03 {
 		System.out.println(f1.equals(f2) + "," + g1.equals(g2));
 		System.out.println(System.identityHashCode(f1) + "," + System.identityHashCode(f2));
 		System.out.println(System.identityHashCode(g1) + "," + System.identityHashCode(g2));
+		
 		System.out.println(0b00000110 & 0b1111101);
 		System.out.println(0b00000110 | 0b1111101);
 		System.out.println(0b00000110 ^ 0b1111101);

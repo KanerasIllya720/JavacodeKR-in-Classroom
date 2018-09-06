@@ -43,7 +43,7 @@ public class 실습03 {
 		System.out.println("큰 값: " + (a>b?a:b));
 		
 		int o, p, q;
-		o=2;p=10; q=15;
+		o=2;p=10; q=20;
 		System.out.println("최대값: "+(o<p&&o>q?o:(p>o&&o>q?p:q)));
 	}
 }

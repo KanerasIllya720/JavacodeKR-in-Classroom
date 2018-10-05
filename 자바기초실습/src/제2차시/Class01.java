@@ -1,4 +1,4 @@
-package 제02차시;
+package 제2차시;
 
 class Class01 {
 	int i=0;

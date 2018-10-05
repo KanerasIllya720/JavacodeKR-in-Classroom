@@ -10,5 +10,6 @@ public class 문제04 {
 		System.out.printf("대문자: ");
 		System.out.println((char)(a.charAt(0)-32));
 		s.close();
+		System.out.printf("%d",'A');
 	}
 }

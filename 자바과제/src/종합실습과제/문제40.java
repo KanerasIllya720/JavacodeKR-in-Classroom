@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class 문제40 {
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
+		System.out.print("자연수(n): ");
 		int n = s.nextInt();
 		int a = 0;
 		int arr[][] = new int[n][n];

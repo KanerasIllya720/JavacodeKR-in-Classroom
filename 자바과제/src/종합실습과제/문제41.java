@@ -5,20 +5,17 @@ import java.util.Scanner;
 public class 문제41 {
 	 public static void main(String[] args) {
 			Scanner s=new Scanner(System.in);
+			System.out.print("자연수(n): ");
 			int n=s.nextInt();
-			int arr[][]=new int[n][n];
-			for(int i=0;i<n;i++)
-				for(int j=0;j<n;j++)
-					arr[i][j]=0;
-			for(int i=0;i<n;i++) {
-				for(int j=n-1-i;j<=n-i+1;j++) {
-					arr[i][j]=42;
+			int a=1;
+			for(int i=n-1;i>=0;i--) {
+				for(int j=1;j<=i;j++) {
+					System.out.print(" ");
 				}
-			}
-			for(int i=0;i<n;i++) {
-				for(int j=0;j<n;j++) {
-						System.out.printf("%d",arr[i][j]);
+				for(int j=1;j<=a;j++) {
+					System.out.print("*");
 				}
+				a+=2;
 				System.out.println();
 			}
 	 }

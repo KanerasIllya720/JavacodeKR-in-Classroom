@@ -14,8 +14,14 @@ public class 문제43 {
 		}
 		for(int i=0;i<n;i++) {
 			for(int j=i;j<n;j++) {
-				if(nums[i]%i==0)
-					sum++;
+				try {
+					if((i%j==0)) {
+						sum++;
+					}
+				}
+				finally {
+					
+				}
 			}
 			if(sum!=2)
 				nums[i]=i;

@@ -9,6 +9,6 @@ public class 문제19 {
 			else
 				sum+=i;
 		}
-		System.out.println(sum );
+		System.out.println(sum);
 	}
 }

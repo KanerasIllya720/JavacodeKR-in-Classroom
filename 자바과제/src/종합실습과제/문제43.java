@@ -14,13 +14,8 @@ public class 문제43 {
 		}
 		for(int i=0;i<n;i++) {
 			for(int j=i;j<n;j++) {
-				try {
-					if((i%j==0)) {
-						sum++;
-					}
-				}
-				finally {
-					
+				if(i%j==0) {
+					sum++;
 				}
 			}
 			if(sum!=2)

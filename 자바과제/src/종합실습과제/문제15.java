@@ -7,7 +7,7 @@ public class 문제15 {
 		Scanner s =new Scanner(System.in);
 		System.out.print("프로 점수: ");
 		int n=s.nextInt();
-		System.out.print("점수: ");
+		System.out.print("등급: ");
 		switch(n/10) {
 		case 9:
 			System.out.println("A");

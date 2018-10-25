@@ -5,6 +5,7 @@ public class Student {
 	int age = -1;
 
 	Student() {
+
 	}
 
 	Student(String sname) {

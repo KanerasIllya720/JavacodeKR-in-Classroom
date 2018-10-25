@@ -13,8 +13,8 @@ public class Main {
 		stu2.print();
 
 		Student stu3 = new Student(19);
-		stu2.name = "황진이";
-		stu2.print();
+		stu3.name = "황진이";
+		stu3.print();
 
 		Student stu4 = new Student("이순신", 20);
 		stu4.print();

@@ -6,5 +6,5 @@ public class 문제42 {
 		System.out.print("배열 요소:");
 		for(int i=0;i<6;i++)
 			System.out.print(num[i]+" ");
-	}
+                                   	}
 }

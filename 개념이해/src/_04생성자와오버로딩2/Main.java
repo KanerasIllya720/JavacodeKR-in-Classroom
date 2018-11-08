@@ -1,4 +1,4 @@
-package _04생성자오버로딩2;
+package _04생성자와오버로딩2;
 
 public class Main {
 

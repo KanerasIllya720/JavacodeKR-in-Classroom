@@ -1,11 +1,13 @@
-package 코드업풀이;
+package 연습용코딩;
 
+import java.util.Random;
 import java.util.Scanner;
 
-public class Main {
+public class prac {
 	public static void main(String[] args) {
+		Random r = new Random();
 		Scanner s = new Scanner(System.in);
 		int n=s.nextInt();
-		System.out.println(n*-1);
+		int ran=r.nextInt(10)+1;
 	}
 }

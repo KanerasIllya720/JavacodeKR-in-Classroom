@@ -1,12 +1,10 @@
 package _11인터페이스의이해;
 
 public class ClassA implements InterfaceA{
-	ClassA(){
-		System.out.println("a="+A);
-		System.out.println("b="+B);
-		InterfaceA.method2();
+	public void speak() {
+		System.out.println("빼에에에에에에에에에에에");
 	}
-	public void method1() {
-		System.out.println("추상메소드 method1()를 오버라이딩함");
+	public void cry() {
+		System.out.println("왈");
 	}
 }

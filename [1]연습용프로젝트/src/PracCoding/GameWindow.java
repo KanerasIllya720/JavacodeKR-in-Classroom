@@ -13,9 +13,9 @@ public class GameWindow extends JFrame {
 	String[] ButtonName = { "전사", "궁수", "방패병" };
 	JButton[] OrButton = new JButton[3];
 	JLabel jl;
-	public GameWindow() {
+	GameWindow() {
 		this.setTitle("Beta 0.01");
-		this.setSize(200, 600);
+		this.setSize(600, 200);
 		this.getContentPane().setBackground(new Color(0x00000000));
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
@@ -25,7 +25,7 @@ public class GameWindow extends JFrame {
 		for (int i = 0; i < ButtonName.length; i++) {
 			OrButton[i]=new JButton(ButtonName[i]);
 			this.add(OrButton[i]);
-			OrButton[i].setPreferredSize(new Dimension(200, 200));
+			OrButton[i].setPreferredSize(new Dimension(180, 170));
 		}
 	}
 }

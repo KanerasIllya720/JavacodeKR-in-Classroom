@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
 	public static void main(String[] args) {
 		Scanner s=new Scanner(System.in);
-		GameWindow gw= new GameWindow();
+		GameWindow gw = new GameWindow();
 	}
 
 }

@@ -110,7 +110,8 @@ public class TetrisWindow extends JFrame implements ActionListener,KeyListener {
 			for(int j=0;j<4;j++) 
 				RotateBlock[j][3-i]=this.NBlock[i][j];
 		NBlock=RotateBlock;
-		//drawTetrisBoard(this.BlockNums, this.BlockX, this.BlockY);
+		tb.repaint();
+		tb.revalidate();
 	}
 
 	public void actionPerformed(ActionEvent act) {

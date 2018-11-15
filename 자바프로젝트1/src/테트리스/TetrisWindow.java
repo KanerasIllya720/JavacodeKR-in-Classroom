@@ -3,17 +3,24 @@ package 테트리스;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class TetrisWindow extends JFrame {
+public class TetrisWindow extends JFrame implements ActionListener,KeyListener {
 	TetrisBoard tb;
+	Random rand = new Random();
 	String[] ButtonName = { "게임시작", "블록교체", "블록회전", "게임종료" };
-	JButton[] OrderButton = new JButton[4];
-	JLabel jl;
+	JButton[] OrButton = new JButton[4];
+	JLabel JL;
 
 	// 3단계
 	int[] BColor;
@@ -29,6 +36,7 @@ public class TetrisWindow extends JFrame {
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setResizable(false);
 
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		// 판넬생성
@@ -39,32 +47,35 @@ public class TetrisWindow extends JFrame {
 		this.add(fp);
 		// 버튼생성
 		for (int i = 0; i < ButtonName.length; i++) {
-			OrderButton[i] = new JButton(ButtonName[i]);
-			fp.add(OrderButton[i]);
+			OrButton[i] = new JButton(ButtonName[i]);
+			fp.add(OrButton[i]);
 		}
-		// 화면 그래픽 갱신,,
+		// 버튼 이벤트 처리
+		for (int i = 0; i < 4; i++)
+			this.OrButton[i].addActionListener(this);
+		// 화면 그래픽 갱신
 		this.repaint();
 		this.revalidate();
 		// 레이블생성
-		jl = new JLabel("Score", JLabel.CENTER);
-		jl.setPreferredSize(new Dimension(60, 25));
-		jl.setBackground(new Color(0x00545966));
-		jl.setOpaque(true);
-		fp.add(jl);
+		JL = new JLabel("Score", JLabel.CENTER);
+		JL.setPreferredSize(new Dimension(60, 25));
+		JL.setBackground(new Color(0x00545966));
+		JL.setOpaque(true);
+		fp.add(JL);
 	}
 
 	void initialize() {
 		// 7개 블록조각 색상
-		this.BColor = new int[]={0xF52525,0xFFA500,0xFFFF00,0x00FF00,0x00FFFF,0x0059FF,0xAC00FF};
+		this.BColor = new int[] { 0xFF0000, 0xFFA500, 0xFFFF00, 0x00FF00, 0x00FFFF, 0x0000FF, 0xFF00FF };
 		// 7개 블록조각 생성
 		this.AllBlock = new int[][][] {
-				{ { Bcolor[0], 0, 0, 0 }, { Bcolor[0], 0, 0, 0 }, { Bcolor[0], 0, 0, 0 }, { Bcolor[0], 0, 0, 0 } },
-				{ { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { Bcolor[1], 0, 0, 0 }, { Bcolor[1], Bcolor[1], Bcolor[1], 0 } },
-				{ { 0, 0, 0, 0 }, { Bcolor[2], 0, 0, 0 }, { Bcolor[2], 0, 0, 0 }, { Bcolor[2], Bcolor[2], 0, 0 } },
-				{ { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { Bcolor[3], Bcolor[3], 0, 0 }, { Bcolor[3], Bcolor[3], 0, 0 } },
-				{ { 0, 0, 0, 0 }, { Bcolor[4], 0, 0, 0 }, { Bcolor[4], Bcolor[4], 0, 0 }, { Bcolor[4], 0, 0, 0 } },
-				{ { 0, 0, 0, 0 }, { Bcolor[5], 0, 0, 0 }, { Bcolor[5], Bcolor[5], 0, 0 }, { 0, Bcolor[5], 0, 0 } },
-				{ { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { Bcolor[6], Bcolor[6], 0, 0 }, { 0, Bcolor[6], Bcolor[6], 0 } } };
+				{ { BColor[0], 0, 0, 0 }, { BColor[0], 0, 0, 0 }, { BColor[0], 0, 0, 0 }, { BColor[0], 0, 0, 0 } },
+				{ { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { BColor[1], 0, 0, 0 }, { BColor[1], BColor[1], BColor[1], 0 } },
+				{ { 0, 0, 0, 0 }, { BColor[2], 0, 0, 0 }, { BColor[2], 0, 0, 0 }, { BColor[2], BColor[2], 0, 0 } },
+				{ { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { BColor[3], BColor[3], 0, 0 }, { BColor[3], BColor[3], 0, 0 } },
+				{ { 0, 0, 0, 0 }, { BColor[4], 0, 0, 0 }, { BColor[4], BColor[4], 0, 0 }, { BColor[4], 0, 0, 0 } },
+				{ { 0, 0, 0, 0 }, { BColor[5], 0, 0, 0 }, { BColor[5], BColor[5], 0, 0 }, { 0, BColor[5], 0, 0 } },
+				{ { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { BColor[6], BColor[6], 0, 0 }, { 0, BColor[6], BColor[6], 0 } } };
 		// 테트리스 게임판 초기화
 		for (int i = 0; i < 20; i++) {
 			for (int j = 0; j < 10; j++) {
@@ -76,5 +87,41 @@ public class TetrisWindow extends JFrame {
 		this.NBlock = AllBlock[BlockNums].clone();
 		this.BlockX = 3;
 		this.BlockY = 0;
+	}
+
+	void drawTetrisBoard(int Blocknums, int x, int y) {
+		this.BlockNums = Blocknums;
+		this.NBlock = this.AllBlock[this.BlockNums].clone();
+		this.BlockX = x;
+		this.BlockY = y;
+
+		tb.repaint();
+		tb.revalidate();
+	}
+
+	public void actionPerformed(ActionEvent act) {
+		JButton jb = (JButton) act.getSource();
+		if (jb.getText().equals("게임시작")) {
+			this.addKeyListener(this);
+		}
+			
+		else if (jb.getText().equals("블록교체")) {
+			this.BlockNums = rand.nextInt(7);
+			this.NBlock = this.AllBlock[this.BlockNums].clone();
+			this.tb.repaint();
+			this.tb.revalidate();
+		} else if (jb.getText().equals("블록회전"))
+			;
+		else if (jb.getText().equals("게임종료"))
+			;
+	}
+	
+	public void keyPressed(KeyEvent key) {
+		JOptionPane.showMessageDialog(Null,key.getKeyChar()+"를 눌렀습니다");
+	}
+
+	public void keyReleased(KeyEvent arg0) {
+	}
+	public void keyTyped(KeyEvent arg0) {
 	}
 }

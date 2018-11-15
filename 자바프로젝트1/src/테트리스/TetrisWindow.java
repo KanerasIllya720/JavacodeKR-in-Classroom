@@ -98,26 +98,63 @@ public class TetrisWindow extends JFrame implements ActionListener,KeyListener {
 		tb.repaint();
 		tb.revalidate();
 	}
+	
+	void moveTetrisBlock(int x,int y) {
+		this.BlockX+=x;
+		this.BlockY+=y;
+		drawTetrisBoard(this.BlockNums, this.BlockX, this.BlockY);
+	}
+	void rotateTetrisBlock() {
+		int[][] RotateBlock = new int[4][4];
+		for(int i=0;i<4;i++)
+			for(int j=0;j<4;j++) 
+				RotateBlock[j][3-i]=this.NBlock[i][j];
+		NBlock=RotateBlock;
+		//drawTetrisBoard(this.BlockNums, this.BlockX, this.BlockY);
+	}
 
 	public void actionPerformed(ActionEvent act) {
 		JButton jb = (JButton) act.getSource();
 		if (jb.getText().equals("게임시작")) {
+			try {
+				this.removeKeyListener(this);
+			} catch (Exception e) {
+			}
 			this.addKeyListener(this);
+			this.requestFocus();
 		}
 			
 		else if (jb.getText().equals("블록교체")) {
 			this.BlockNums = rand.nextInt(7);
 			this.NBlock = this.AllBlock[this.BlockNums].clone();
-			this.tb.repaint();
-			this.tb.revalidate();
-		} else if (jb.getText().equals("블록회전"))
-			;
+			drawTetrisBoard(this.BlockNums, this.BlockX, this.BlockY);
+			this.requestFocus();
+		} else if (jb.getText().equals("블록회전")) {
+
+		}
+			
 		else if (jb.getText().equals("게임종료"))
 			;
 	}
 	
 	public void keyPressed(KeyEvent key) {
-		JOptionPane.showMessageDialog(Null,key.getKeyChar()+"를 눌렀습니다");
+		switch(key.getKeyCode()) {
+		case KeyEvent.VK_LEFT:
+			moveTetrisBlock(-1,0);
+			break;
+		case KeyEvent.VK_RIGHT:
+			moveTetrisBlock(1,0);
+			break;
+		case KeyEvent.VK_UP:
+			this.rotateTetrisBlock();
+			this.requestFocus();
+			break;
+		case KeyEvent.VK_DOWN:
+			moveTetrisBlock(0,1);
+			break;
+		case KeyEvent.VK_SPACE:
+			break;
+		}
 	}
 
 	public void keyReleased(KeyEvent arg0) {

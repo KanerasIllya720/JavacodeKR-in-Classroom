@@ -39,9 +39,9 @@ public class TetrisBoard extends JPanel {
 				if (tw.NBlock[i][j] > 0) {
 					g.setColor(new Color(tw.NBlock[i][j]));
 					g.fillRect(100 + (tw.BlockX + j) * 30, 25 + (tw.BlockY + i) * 30, 30, 30);
+					g.setColor(new Color(0x00E2E4E6));
+					g.drawRect(100 + (tw.BlockX + j) * 30, 25 + (tw.BlockY + i) * 30, 30, 30);
 				}
-				g.setColor(new Color(0x00E2E4E6));
-				g.drawRect(100 + (tw.BlockX + j) * 30, 25 + (tw.BlockY + i) * 30, 30, 30);
 			}
 		}
 	}

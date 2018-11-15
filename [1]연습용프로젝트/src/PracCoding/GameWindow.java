@@ -25,7 +25,7 @@ public class GameWindow extends JFrame {
 		for (int i = 0; i < ButtonName.length; i++) {
 			OrButton[i]=new JButton(ButtonName[i]);
 			this.add(OrButton[i]);
-			OrButton[i].setSize(200, 200);
+			OrButton[i].setPreferredSize(new Dimension(200, 200));
 		}
 	}
 }

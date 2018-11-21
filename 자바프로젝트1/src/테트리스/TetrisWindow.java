@@ -130,6 +130,7 @@ public class TetrisWindow extends JFrame implements ActionListener,KeyListener {
 			this.NBlock = this.AllBlock[this.BlockNums].clone();
 			drawTetrisBoard(this.BlockNums, this.BlockX, this.BlockY);
 			this.requestFocus();
+			JOptionPane.showMessageDialog(null,"감지됨");
 		} else if (jb.getText().equals("블록회전")) {
 
 		}

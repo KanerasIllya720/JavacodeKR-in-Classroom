@@ -1,6 +1,7 @@
 package 테트리스;
 
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -34,11 +35,6 @@ public class TetrisWindow extends JFrame implements ActionListener,KeyListener {
 	int BlockNums, BlockX, BlockY;
 
 	public TetrisWindow() {
-		new JFXPanel();
-		Media m = new Media("file:/g:/Koishi.mp3");
-	    MediaPlayer p = new MediaPlayer(m);
-	    p.play();
-	    p.setVolume(0.1);
 		this.setTitle("Tetris 0.01");
 		this.setSize(500, 730);
 		this.getContentPane().setBackground(new Color(0x00000000));

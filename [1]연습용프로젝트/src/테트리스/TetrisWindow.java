@@ -34,8 +34,8 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 	int minX, minY, maxX, maxY;
 	boolean isBottom;
 	int score;
-	//test
-	int NextBlock;
+	// test
+	int NextBlock = rand.nextInt(7);
 
 	public TetrisWindow() {
 		this.setTitle("Tetris 0.01");
@@ -66,6 +66,7 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 		this.revalidate();
 		// 레이블생성
 		JL = new JLabel("Score", JLabel.CENTER);
+		JL.setForeground(Color.WHITE);
 		JL.setPreferredSize(new Dimension(60, 25));
 		JL.setBackground(new Color(0x00545966));
 		JL.setOpaque(true);
@@ -215,15 +216,15 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 			if (cnt < 10)
 				continue;
 			// 블록제거
-			for(int m=i;m>0;m--) {
-				for(int n=0;n<10;n++) {
-					TetrisMap[m][n]=TetrisMap[m-1][n];
-					TetrisMap[m-1][n]=0;
+			for (int m = i; m > 0; m--) {
+				for (int n = 0; n < 10; n++) {
+					TetrisMap[m][n] = TetrisMap[m - 1][n];
+					TetrisMap[m - 1][n] = 0;
 				}
 			}
-			//점수가산
-			score+=10;
-			this.JL.setText(score+"점");
+			// 점수가산
+			score += 10;
+			this.JL.setText(score + "점");
 			i++;
 		}
 	}
@@ -267,7 +268,7 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 
 			// 맵에 블록 기록
 			recordInTetrisMap();
-			//라인삭제
+			// 라인삭제
 			removeFullLines();
 			// 새로운 블록 등장
 			NextBlock = rand.nextInt(7);

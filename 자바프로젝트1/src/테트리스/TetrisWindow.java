@@ -32,6 +32,10 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 	int BlockNums, BlockX, BlockY;
 	// 4단계
 	int minX, minY, maxX, maxY;
+	boolean isBottom;
+	int score;
+	// test변수
+	int NextBlockNums;
 
 	public TetrisWindow() {
 		this.setTitle("Tetris 0.01");
@@ -114,15 +118,41 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 			this.BlockX -= x;
 			this.BlockY -= y;
 		}
+
+		// 바닥인지 검사
+		this.isBottom = isBottom();
+
 		tb.repaint();
-		tb.revalidate();`
+		tb.revalidate();
+	}
+
+	boolean isBottom() {
+		if (BlockY + maxY >= 19)
+			return true;
+		for (int i = maxY; i >= minY; i--) {
+			for (int j = minX; j <= maxX; j++) {
+				if (NBlock[i][j] > 0) {
+					if (TetrisMap[BlockY + i + 1][BlockX + j] > 0)
+						return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	boolean haveBlockTroubles(int[][] N2Block) {
-		if ((BlockX + maxX > 9) || (BlockX < 0)||(BlockY+maxY > 19))
+		getMinMaxXY(N2Block);
+		if ((BlockX + maxX > 9) || (BlockX < 0) || (BlockY + maxY > 19))
 			return true;
-		else
-			return false;
+		for (int i = maxY; i >= minY; i--) {
+			for (int j = minX; j <= maxX; j++) {
+				if (N2Block[i][j] > 0) {
+					if (TetrisMap[BlockY + i][BlockX + j] > 0)
+						return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	void rotateTetrisBlock() {
@@ -143,7 +173,8 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 			}
 		}
 
-		NBlock = RotateBlock;
+		if (haveBlockTroubles(RotateBlock) == false)
+			NBlock = RotateBlock;
 		getMinMaxXY(NBlock);
 		tb.repaint();
 		tb.revalidate();
@@ -161,6 +192,40 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 					maxY = Math.max(maxY, i);
 				}
 			}
+		}
+	}
+
+	void recordInTetrisMap() {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (NBlock[i][j] > 0) {
+					TetrisMap[BlockY + i][BlockX + j] = NBlock[i][j];
+				}
+			}
+		}
+	}
+
+	void removeFullLines() {
+		for (int i = 19; i >= 0; i--) {
+			int cnt = 0;
+			for (int j = 0; j < 10; j++) {
+				if (TetrisMap[i][j] > 0)
+					cnt++;
+			}
+			if (cnt < 10)
+				continue;
+			// 블록제거
+			for(int m=i;m>0;m--) {
+				for(int n=0;n<10;n++) {
+					TetrisMap[m][n]=TetrisMap[m-1][n];
+					TetrisMap[m-1][n]=0;
+				}
+			}
+			
+			//점수가산
+			score+=10;
+			this.JL.setText(score+"점");
+			i++;
 		}
 	}
 
@@ -204,6 +269,20 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 			moveTetrisBlock(0, 1);
 			break;
 		case KeyEvent.VK_SPACE:
+			isBottom = false;
+			// 바닥으로 꼴아박기
+			while (isBottom == false) {
+				moveTetrisBlock(0, 1);
+			}
+
+			// 맵에 블록 기록
+			recordInTetrisMap();
+			//라인삭제
+			removeFullLines();
+			// 새로운 블록 등장
+			NextBlockNums = rand.nextInt(7);
+			BlockNums = NextBlockNums;
+			drawTetrisBoard(BlockNums, 3, 0);
 			break;
 		}
 	}

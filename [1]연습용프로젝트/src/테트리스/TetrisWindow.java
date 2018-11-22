@@ -34,8 +34,8 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 	int minX, minY, maxX, maxY;
 	boolean isBottom;
 	int score;
-	// test변수
-	int NextBlockNums;
+	//test
+	int NextBlock;
 
 	public TetrisWindow() {
 		this.setTitle("Tetris 0.01");
@@ -221,7 +221,6 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 					TetrisMap[m-1][n]=0;
 				}
 			}
-			
 			//점수가산
 			score+=10;
 			this.JL.setText(score+"점");
@@ -240,13 +239,8 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 			this.requestFocus();
 		}
 
-		/*else if (jb.getText().equals("블록교체")) {
-			this.BlockNums = rand.nextInt(7);
-			this.NBlock = this.AllBlock[this.BlockNums].clone();
-			drawTetrisBoard(this.BlockNums, this.BlockX, this.BlockY);
-			this.requestFocus();*/
 		else if (jb.getText().equals("Close"))
-			;
+			System.exit(0);
 	}
 
 	public void keyPressed(KeyEvent key) {
@@ -276,9 +270,9 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 			//라인삭제
 			removeFullLines();
 			// 새로운 블록 등장
-			NextBlockNums = rand.nextInt(7);
-			BlockNums = NextBlockNums;
+			NextBlock = rand.nextInt(7);
 			drawTetrisBoard(BlockNums, 3, 0);
+			BlockNums = NextBlock;
 			break;
 		}
 	}

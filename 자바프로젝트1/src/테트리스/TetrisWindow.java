@@ -15,7 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class TetrisWindow extends JFrame implements ActionListener,KeyListener {
+import javafx.scene.transform.Rotate;
+
+public class TetrisWindow extends JFrame implements ActionListener, KeyListener {
 	TetrisBoard tb;
 	Random rand = new Random();
 	String[] ButtonName = { "게임시작", "블록교체", "블록회전", "게임종료" };
@@ -28,6 +30,8 @@ public class TetrisWindow extends JFrame implements ActionListener,KeyListener {
 	int[][][] AllBlock;
 	int[][] NBlock;
 	int BlockNums, BlockX, BlockY;
+	// 4단계
+	int minX, minY, maxX, maxY;
 
 	public TetrisWindow() {
 		this.setTitle("Tetris 0.01");
@@ -98,20 +102,66 @@ public class TetrisWindow extends JFrame implements ActionListener,KeyListener {
 		tb.repaint();
 		tb.revalidate();
 	}
-	
-	void moveTetrisBlock(int x,int y) {
-		this.BlockX+=x;
-		this.BlockY+=y;
-		drawTetrisBoard(this.BlockNums, this.BlockX, this.BlockY);
+
+	void moveTetrisBlock(int x, int y) {
+		this.BlockX += x;
+		this.BlockY += y;
+
+		getMinMaxXY(NBlock);
+
+		// 맵 이탈 방지
+		if (haveBlockTroubles(NBlock) == true) {
+			this.BlockX -= x;
+			this.BlockY -= y;
+		}
+		tb.repaint();
+		tb.revalidate();`
 	}
+
+	boolean haveBlockTroubles(int[][] N2Block) {
+		if ((BlockX + maxX > 9) || (BlockX < 0)||(BlockY+maxY > 19))
+			return true;
+		else
+			return false;
+	}
+
 	void rotateTetrisBlock() {
 		int[][] RotateBlock = new int[4][4];
-		for(int i=0;i<4;i++)
-			for(int j=0;j<4;j++) 
-				RotateBlock[j][3-i]=this.NBlock[i][j];
-		NBlock=RotateBlock;
+		for (int i = 0; i < 4; i++)
+			for (int j = 0; j < 4; j++)
+				RotateBlock[j][3 - i] = this.NBlock[i][j];
+		// 내부 조각 범위 확인
+		getMinMaxXY(RotateBlock);
+		// 블록 좌측 하단이동
+		int MoveLeft = minX;
+		int MoveDown = 3 - maxY;
+		for (int i = maxY; i >= minY; i--) {
+			for (int j = minX; j <= maxX; j++) {
+				int value = RotateBlock[i][j];
+				RotateBlock[i][j] = 0;
+				RotateBlock[i + MoveDown][j - MoveLeft] = value;
+			}
+		}
+
+		NBlock = RotateBlock;
+		getMinMaxXY(NBlock);
 		tb.repaint();
 		tb.revalidate();
+	}
+
+	void getMinMaxXY(int[][] NowBlock) {
+		minX = minY = 999;
+		maxX = maxY = 0;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (NowBlock[i][j] > 0) {
+					minX = Math.min(minX, j);
+					maxX = Math.max(maxX, j);
+					minY = Math.min(minY, i);
+					maxY = Math.max(maxY, i);
+				}
+			}
+		}
 	}
 
 	public void actionPerformed(ActionEvent act) {
@@ -124,35 +174,34 @@ public class TetrisWindow extends JFrame implements ActionListener,KeyListener {
 			this.addKeyListener(this);
 			this.requestFocus();
 		}
-			
+
 		else if (jb.getText().equals("블록교체")) {
 			this.BlockNums = rand.nextInt(7);
 			this.NBlock = this.AllBlock[this.BlockNums].clone();
 			drawTetrisBoard(this.BlockNums, this.BlockX, this.BlockY);
 			this.requestFocus();
-			JOptionPane.showMessageDialog(null,"감지됨");
 		} else if (jb.getText().equals("블록회전")) {
 
 		}
-			
+
 		else if (jb.getText().equals("게임종료"))
 			;
 	}
-	
+
 	public void keyPressed(KeyEvent key) {
-		switch(key.getKeyCode()) {
+		switch (key.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
-			moveTetrisBlock(-1,0);
+			moveTetrisBlock(-1, 0);
 			break;
 		case KeyEvent.VK_RIGHT:
-			moveTetrisBlock(1,0);
+			moveTetrisBlock(1, 0);
 			break;
 		case KeyEvent.VK_UP:
 			this.rotateTetrisBlock();
 			this.requestFocus();
 			break;
 		case KeyEvent.VK_DOWN:
-			moveTetrisBlock(0,1);
+			moveTetrisBlock(0, 1);
 			break;
 		case KeyEvent.VK_SPACE:
 			break;
@@ -161,6 +210,7 @@ public class TetrisWindow extends JFrame implements ActionListener,KeyListener {
 
 	public void keyReleased(KeyEvent arg0) {
 	}
+
 	public void keyTyped(KeyEvent arg0) {
 	}
 }

@@ -8,6 +8,7 @@ public class Main {
 	public static void main(String[] args) {
 		JFrame jf = new JFrame();
 		JLabel jl = new JLabel();
+		jf.setSize(new Dimension(200, 200));
 		jf.setTitle("test");
 		jf.setPreferredSize(new Dimension(200, 200));
 		jf.getContentPane().setBackground(new Color(0x00000000));
@@ -20,6 +21,6 @@ public class Main {
 		jl.setVerticalAlignment(SwingConstants.CENTER);
 		jl.setHorizontalAlignment(SwingConstants.CENTER);
 		jl.setOpaque(false);
-		jl.setForeground(Color.white);
+		jl.setForeground(Color.WHITE);
 	}
 }

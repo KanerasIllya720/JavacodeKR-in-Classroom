@@ -14,14 +14,14 @@ public class 문제40 {
 				arr[i][j] = 0;
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				arr[i][j] = a%n+1;
+				arr[i][j] = a % n + 1;
 				a++;
 			}
-			a-=4;
+			a -= 4;
 		}
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-					System.out.printf("%3d", arr[i][j]);
+				System.out.printf("%3d", arr[i][j]);
 			}
 			System.out.println();
 		}

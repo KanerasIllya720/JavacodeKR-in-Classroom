@@ -75,7 +75,7 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 
 	void initialize() {
 		// 7개 블록조각 색상
-		this.BColor = new int[] { 0xFF0000, 0xFFA500, 0xFFFF00, 0x00FF00, 0x00FFFF, 0x0000FF, 0xFF00FF };
+		this.BColor = new int[] { 0xEE49EE, 0xFF0000, 0xFFFF00, 0x0059FF, 0xFFA500, 0x00FF00, 0x00FFFF };
 		// 7개 블록조각 생성
 		this.AllBlock = new int[][][] {
 				{ { BColor[0], 0, 0, 0 }, { BColor[0], 0, 0, 0 }, { BColor[0], 0, 0, 0 }, { BColor[0], 0, 0, 0 } },

@@ -223,7 +223,7 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 				}
 			}
 			// 점수가산
-			score += 10;
+				score += 10;
 			this.JL.setText(score + "점");
 			i++;
 		}

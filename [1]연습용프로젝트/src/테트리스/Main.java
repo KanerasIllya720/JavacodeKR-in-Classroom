@@ -1,4 +1,4 @@
-package 테트리스;
+ package 테트리스;
 
 import java.util.Random;
 

@@ -24,7 +24,7 @@ public class 문제49 {
 		}
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				System.out.printf("%3d", arr[i][j]);
+				System.out.printf("%4d", arr[i][j]);
 			}
 			System.out.println();
 		}

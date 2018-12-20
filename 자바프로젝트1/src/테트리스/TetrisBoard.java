@@ -46,11 +46,11 @@ public class TetrisBoard extends JPanel {
 		}
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
-				if (tw.AllBlock[tw.BlockNums][i][j] > 0) {
-					g.setColor(new Color(tw.AllBlock[tw.BlockNums][i][j]));
-					g.fillRect(415 + j * 15, 25 + i * 15, 15, 15);
+				if (tw.AllBlock[tw.NextBlock][i][j] > 0) {
+					g.setColor(new Color(tw.AllBlock[tw.NextBlock][i][j]));
+					g.fillRect(400 + j * 15, 25 + i * 15, 15, 15);
 					g.setColor(new Color(0x00E2E4E6));
-					g.drawRect(415 + j * 15, 25 + i * 15, 15, 15);
+					g.drawRect(400 + j * 15, 25 + i * 15, 15, 15);
 				}
 			}
 		}

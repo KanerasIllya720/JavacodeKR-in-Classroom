@@ -15,9 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.transform.Rotate;
 
-public class TetrisWindow extends JFrame implements ActionListener, KeyListener {
+public class TetrisWindow extends JFrame implements ActionListener, KeyListener, Runnable {
 	TetrisBoard tb;
 	Random rand = new Random();
 	String[] ButtonName = { "Start", "Close" };
@@ -34,6 +36,8 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 	int minX, minY, maxX, maxY;
 	boolean isBottom;
 	int score;
+	Thread runThread;
+	boolean duringPlay = false;
 	// test
 	int NextBlock = rand.nextInt(7);
 
@@ -223,7 +227,7 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 				}
 			}
 			// 점수가산
-				score += 10;
+			score += 10;
 			this.JL.setText(score + "점");
 			i++;
 		}
@@ -232,6 +236,10 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 	public void actionPerformed(ActionEvent act) {
 		JButton jb = (JButton) act.getSource();
 		if (jb.getText().equals("Start")) {
+			// 낙하 스레드
+			duringPlay = true;
+			runThread = new Thread(this);
+			runThread.start();
 			try {
 				this.removeKeyListener(this);
 			} catch (Exception e) {
@@ -282,5 +290,25 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener 
 	}
 
 	public void keyTyped(KeyEvent arg0) {
+	}
+
+	public void run() {
+		while (duringPlay) {
+			try {
+				if (isBottom()) {
+					recordInTetrisMap();
+					removeFullLines();
+					NextBlock = rand.nextInt(7);
+					drawTetrisBoard(BlockNums, 3, 0);
+					BlockNums = NextBlock;
+					
+					this.isBottom = false;
+				} else {
+					moveTetrisBlock(0, 1);
+				}
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			}
+		}
 	}
 }

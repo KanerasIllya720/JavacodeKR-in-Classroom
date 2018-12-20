@@ -6,6 +6,7 @@ public class Main {
 	public static void main(String[] args) {
 		TetrisWindow tw = new TetrisWindow();
 		TetrisBoard tb = new TetrisBoard();
+
 		Random rand = new Random();
 		tw.add(tb);
 
@@ -19,5 +20,6 @@ public class Main {
 
 		tw.repaint();
 		tw.revalidate();
+		
 	}
 }

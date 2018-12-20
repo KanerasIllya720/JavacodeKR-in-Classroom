@@ -12,12 +12,7 @@ import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.transform.Rotate;
 
 public class TetrisWindow extends JFrame implements ActionListener, KeyListener, Runnable {
 	TetrisBoard tb;
@@ -40,6 +35,8 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener,
 	boolean duringPlay = false;
 	// test
 	int NextBlock = rand.nextInt(7);
+	int speed = 1000;
+	int cntCombo = 0;
 
 	public TetrisWindow() {
 		this.setTitle("Tetris 0.01");
@@ -226,11 +223,19 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener,
 					TetrisMap[m - 1][n] = 0;
 				}
 			}
-			// 점수가산
-			score += 10;
-			this.JL.setText(score + "점");
+			cntCombo++;
 			i++;
 		}
+		if(cntCombo == 1)
+			score += 10;
+		else if(cntCombo == 2)
+			score += 30;
+		else if(cntCombo == 3)
+			score += 60;
+		else if(cntCombo == 4)
+			score += 100;
+		this.JL.setText(score + "점");
+		cntCombo = 0;
 	}
 
 	public void actionPerformed(ActionEvent act) {
@@ -240,6 +245,7 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener,
 			duringPlay = true;
 			runThread = new Thread(this);
 			runThread.start();
+			// 음악
 			try {
 				this.removeKeyListener(this);
 			} catch (Exception e) {
@@ -301,12 +307,22 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener,
 					NextBlock = rand.nextInt(7);
 					drawTetrisBoard(BlockNums, 3, 0);
 					BlockNums = NextBlock;
-					
+
 					this.isBottom = false;
 				} else {
 					moveTetrisBlock(0, 1);
 				}
-				Thread.sleep(1000);
+				if (score >= 500)
+					speed = 900;
+				else if (score >= 1000)
+					speed = 800;
+				else if (score >= 1500)
+					speed = 700;
+				else if (score >= 2000)
+					speed = 600;
+				else if (score >= 2500)
+					speed = 500;
+				Thread.sleep(speed);
 			} catch (InterruptedException e) {
 			}
 		}

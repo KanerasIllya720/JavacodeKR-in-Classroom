@@ -2,23 +2,28 @@ package 테트리스;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
-import javax.swing.JButton;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
-public class TetrisWindow extends JFrame implements ActionListener, KeyListener, Runnable {
+public class TetrisWindow extends JFrame implements KeyListener, Runnable {
 	TetrisBoard tb;
 	Random rand = new Random();
-	String[] ButtonName = { "Start", "Close" };
-	JButton[] OrButton = new JButton[2];
 	JLabel JL;
 
 	// 3단계
@@ -27,6 +32,7 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener,
 	int[][][] AllBlock;
 	int[][] NBlock;
 	int BlockNums, BlockX, BlockY;
+	int firstBlockX, firstBlockY;
 	// 4단계
 	int minX, minY, maxX, maxY;
 	boolean isBottom;
@@ -37,43 +43,77 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener,
 	int NextBlock = rand.nextInt(7);
 	int speed = 1000;
 	int cntCombo = 0;
+	// 5단계
+	JMenuBar menuBar;
+	JMenu[] menu;
+	JMenuItem[] menuItem;
 
 	public TetrisWindow() {
 		this.setTitle("Tetris 0.01");
-		this.setSize(500, 730);
+		this.setSize(500, 700);
 		this.getContentPane().setBackground(new Color(0x00000000));
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setResizable(false);
 
-		this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		// 판넬생성
-		JPanel fp = new JPanel();
-		fp.setPreferredSize(new Dimension(500, 40));
-		fp.setBackground(new Color(0x001F1F20));
-		fp.setOpaque(true);
-		this.add(fp);
-		// 버튼생성
-		for (int i = 0; i < ButtonName.length; i++) {
-			OrButton[i] = new JButton(ButtonName[i]);
-			fp.add(OrButton[i]);
-		}
-		// 버튼 이벤트 처리
-		for (int i = 0; i < 2; i++)
-			this.OrButton[i].addActionListener(this);
+		// this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		this.setLayout(null);
 		// 화면 그래픽 갱신
 		this.repaint();
 		this.revalidate();
 		// 레이블생성
 		JL = new JLabel("Score", JLabel.CENTER);
 		JL.setForeground(Color.WHITE);
-		JL.setPreferredSize(new Dimension(60, 25));
+		JL.setPreferredSize(new Dimension(70, 25));
 		JL.setBackground(new Color(0x00545966));
 		JL.setOpaque(true);
-		fp.add(JL);
+		addMenu();
 	}
 
+	private void addMenu() {
+		menuBar = new JMenuBar();
+		menu = new JMenu[] { new JMenu("Command"), new JMenu("Music") };
+		menuItem = new JMenuItem[] { new JMenuItem("Start"), new JMenuItem("Stop"), new JMenuItem("Close") };
+
+		menu[0].add(menuItem[0]);
+		menu[0].add(menuItem[1]);
+		menu[0].add(menuItem[2]);
+
+		menuBar.add(menu[0]);
+		menuBar.add(menu[1]);
+
+		this.setJMenuBar(menuBar);
+		for (int i = 0; i < 3; i++) {
+			menuItem[i].addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String commandName = arg0.getActionCommand();
+					switch (commandName) {
+					case "Start":
+						executeGameStartCommand();
+						playSound("./Sound/BGM_Tetris_Bradinsky.wav");
+						break;
+					case "Stop":
+						executeEndCommand();
+						break;
+					case "Close":
+						System.exit(0);
+						break;
+					}
+				}	
+			});
+		}
+	}
+	private void playSound(String fileName) {
+		try {
+			AudioInputStream ais = AudioSystem.getAudioInputStream(new File(fileName));
+			Clip clip = AudioSystem.getClip();
+			clip.stop();
+			clip.open(ais);
+			clip.start();
+		} catch (Exception e) {
+		}
+	}
 	void initialize() {
 		// 7개 블록조각 색상
 		this.BColor = new int[] { 0xEE49EE, 0xFF0000, 0xFFFF00, 0x0059FF, 0xFFA500, 0x00FF00, 0x00FFFF };
@@ -93,17 +133,18 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener,
 			}
 		}
 		// 게임 변수 초기화
-		this.BlockNums = 0;
+		this.NextBlock = rand.nextInt(7);
 		this.NBlock = AllBlock[BlockNums].clone();
-		this.BlockX = 3;
-		this.BlockY = 0;
+		this.BlockX = firstBlockX = 3;
+		this.BlockY = firstBlockY = 0;
 	}
 
-	void drawTetrisBoard(int Blocknums, int x, int y) {
-		this.BlockNums = Blocknums;
+	void makeNewTetrisBlock() {
+		this.BlockNums = this.NextBlock;
+		this.NextBlock = rand.nextInt(7);
 		this.NBlock = this.AllBlock[this.BlockNums].clone();
-		this.BlockX = x;
-		this.BlockY = y;
+		this.BlockX = this.firstBlockX;
+		this.BlockY = this.firstBlockY;
 
 		tb.repaint();
 		tb.revalidate();
@@ -226,36 +267,37 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener,
 			cntCombo++;
 			i++;
 		}
-		if(cntCombo == 1)
+		if (cntCombo == 1)
 			score += 10;
-		else if(cntCombo == 2)
+		else if (cntCombo == 2)
 			score += 30;
-		else if(cntCombo == 3)
+		else if (cntCombo == 3)
 			score += 60;
-		else if(cntCombo == 4)
+		else if (cntCombo == 4)
 			score += 100;
-		this.JL.setText(score + "점");
+		tb.JScore.setText(score + "점");
 		cntCombo = 0;
 	}
 
-	public void actionPerformed(ActionEvent act) {
-		JButton jb = (JButton) act.getSource();
-		if (jb.getText().equals("Start")) {
-			// 낙하 스레드
-			duringPlay = true;
-			runThread = new Thread(this);
-			runThread.start();
-			// 음악
-			try {
-				this.removeKeyListener(this);
-			} catch (Exception e) {
-			}
-			this.addKeyListener(this);
-			this.requestFocus();
+	private void executeEndCommand() {
+		duringPlay = false;
+		while (runThread.isAlive()) {
+			runThread.interrupt();
 		}
+	}
 
-		else if (jb.getText().equals("Close"))
-			System.exit(0);
+	private void executeGameStartCommand() {
+		initialize();
+		// 낙하 스레드
+		duringPlay = true;
+		runThread = new Thread(this);
+		runThread.start();
+		try {
+			this.removeKeyListener(this);
+		} catch (Exception e) {
+		}
+		this.addKeyListener(this);
+		this.requestFocus();
 	}
 
 	public void keyPressed(KeyEvent key) {
@@ -284,10 +326,15 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener,
 			recordInTetrisMap();
 			// 라인삭제
 			removeFullLines();
+			duringPlay = isNotEnd(NextBlock);
+			if (duringPlay == false) {
+				JOptionPane.showMessageDialog(null, "게임이 종료되었습니다", "게임 종료", JOptionPane.INFORMATION_MESSAGE);
+				tb.repaint();
+				tb.revalidate();
+				return;
+			}
 			// 새로운 블록 등장
-			NextBlock = rand.nextInt(7);
-			drawTetrisBoard(BlockNums, 3, 0);
-			BlockNums = NextBlock;
+			makeNewTetrisBlock();
 			break;
 		}
 	}
@@ -304,27 +351,50 @@ public class TetrisWindow extends JFrame implements ActionListener, KeyListener,
 				if (isBottom()) {
 					recordInTetrisMap();
 					removeFullLines();
-					NextBlock = rand.nextInt(7);
-					drawTetrisBoard(BlockNums, 3, 0);
-					BlockNums = NextBlock;
+					duringPlay = isNotEnd(NextBlock);
+					if (duringPlay == false) {
+						JOptionPane.showMessageDialog(null, "게임이 종료되었습니다", "게임 종료", JOptionPane.INFORMATION_MESSAGE);
+						tb.repaint();
+						tb.revalidate();
+						return;
+					}
+					makeNewTetrisBlock();
 
 					this.isBottom = false;
 				} else {
 					moveTetrisBlock(0, 1);
 				}
-				if (score >= 500)
+				if (score >= 500) {
 					speed = 900;
-				else if (score >= 1000)
+					tb.JLevel.setText("Level 1");
+				} else if (score >= 100) {
 					speed = 800;
-				else if (score >= 1500)
+					tb.JLevel.setText("Level 2");
+				} else if (score >= 1500) {
 					speed = 700;
-				else if (score >= 2000)
+					tb.JLevel.setText("Level 3");
+				} else if (score >= 2000) {
 					speed = 600;
-				else if (score >= 2500)
+					tb.JLevel.setText("Level 4");
+				} else if (score >= 2500) {
 					speed = 500;
+					tb.JLevel.setText("Level 5");
+				}
 				Thread.sleep(speed);
 			} catch (InterruptedException e) {
 			}
 		}
+	}
+
+	private boolean isNotEnd(int nextBlockNumber) {
+		int[][] nextBlocks = this.AllBlock[nextBlockNumber].clone();
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if ((nextBlocks[i][j] > 0) && (this.TetrisMap[this.firstBlockY + i][this.firstBlockX + j] > 0)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }

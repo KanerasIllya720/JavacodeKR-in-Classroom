@@ -4,16 +4,33 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class TetrisBoard extends JPanel {
 	TetrisWindow tw;
+	JLabel JScore;
+	JLabel JLevel;
 
 	public TetrisBoard() {
-		this.setPreferredSize(new Dimension(500, 650));
+		this.setLayout(null);
+		this.setSize(new Dimension(500, 650));
 		this.setBackground(new Color(0x00000000));
+		//점수
+		JScore=new JLabel("Score",JLabel.CENTER);
+		JScore.setForeground(Color.WHITE);
+		JScore.setBounds(410,130,80,40);
+		JScore.setBackground(Color.DARK_GRAY);
+		JScore.setOpaque(true);
+		this.add(JScore);
+		//레벨
+		JLevel=new JLabel("Level 0",JLabel.CENTER);
+		JLevel.setForeground(Color.WHITE);
+		JLevel.setBounds(410, 170, 80, 40);
+		JLevel.setBackground(Color.DARK_GRAY);
+		JLevel.setOpaque(true);
+		this.add(JLevel);
 	}
-
 	// 테트리스 맵 나타내기
 	protected void paintComponent(Graphics g) {// call back 함수
 		super.paintComponent(g);
@@ -30,7 +47,7 @@ public class TetrisBoard extends JPanel {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				g.setColor(new Color(0x00E2E4E6));
-				g.drawRect(400 + j * 15, 25 + i * 15, 15, 15);
+				g.drawRect(410 + j * 20, 25 + i * 20, 20, 20);
 			}
 		}
 	// 게임판 블록 얹히기
@@ -48,13 +65,13 @@ public class TetrisBoard extends JPanel {
 			for (int j = 0; j < 4; j++) {
 				if (tw.AllBlock[tw.NextBlock][i][j] > 0) {
 					g.setColor(new Color(tw.AllBlock[tw.NextBlock][i][j]));
-					g.fillRect(400 + j * 15, 25 + i * 15, 15, 15);
+					g.fillRect(410 + j * 20, 25 + i * 20, 20, 20);
 					g.setColor(new Color(0x00E2E4E6));
-					g.drawRect(400 + j * 15, 25 + i * 15, 15, 15);
+					g.drawRect(410 + j * 20, 25 + i * 20, 20, 20);
 				}
 			}
 		}
 		
 	}
-	
+
 }

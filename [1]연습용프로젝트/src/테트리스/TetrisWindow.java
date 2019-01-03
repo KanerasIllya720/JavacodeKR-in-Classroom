@@ -41,6 +41,8 @@ public class TetrisWindow extends JFrame implements KeyListener, Runnable {
 	int NextBlock = rand.nextInt(7);
 	int speed = 1000;
 	int cntCombo = 0;
+	Clip clip;
+
 	// 5단계
 	JMenuBar menuBar;
 	JMenu[] menu;
@@ -72,24 +74,27 @@ public class TetrisWindow extends JFrame implements KeyListener, Runnable {
 	private void addMenu() {
 		menuBar = new JMenuBar();
 		menu = new JMenu[] { new JMenu("Command"), new JMenu("Music") };
-		menuItem = new JMenuItem[] { new JMenuItem("Start"), new JMenuItem("Stop"), new JMenuItem("Close") };
+		menuItem = new JMenuItem[] { new JMenuItem("Start"), new JMenuItem("Stop"), new JMenuItem("Close"),
+				new JMenuItem("Bradinsky"), new JMenuItem("Kalinka") };
 
 		menu[0].add(menuItem[0]);
 		menu[0].add(menuItem[1]);
 		menu[0].add(menuItem[2]);
 
+		menu[1].add(menuItem[3]);
+		menu[1].add(menuItem[4]);
+
 		menuBar.add(menu[0]);
 		menuBar.add(menu[1]);
 
 		this.setJMenuBar(menuBar);
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 5; i++) {
 			menuItem[i].addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					String commandName = arg0.getActionCommand();
 					switch (commandName) {
 					case "Start":
 						executeGameStartCommand();
-						playSound("./Sound/BGM_Tetris_Bradinsky.wav");
 						break;
 					case "Stop":
 						executeEndCommand();
@@ -97,21 +102,34 @@ public class TetrisWindow extends JFrame implements KeyListener, Runnable {
 					case "Close":
 						System.exit(0);
 						break;
+					case "Bradinsky":
+						if(clip!=null && clip.isActive())
+							clip.stop();
+						playSound("./Sound/BGM_Tetris_Bradinsky.wav");
+						break;
+					case "Kalinka":
+						if(clip!=null && clip.isActive())
+							clip.stop();
+						playSound("./Sound/BGM_Tetris_Kalinka.wav");
+						break;
 					}
-				}	
+				}
 			});
 		}
 	}
+
 	private void playSound(String fileName) {
 		try {
 			AudioInputStream ais = AudioSystem.getAudioInputStream(new File(fileName));
-			Clip clip = AudioSystem.getClip();
+			clip = AudioSystem.getClip();
 			clip.stop();
 			clip.open(ais);
 			clip.start();
+			clip.loop(-1);
 		} catch (Exception e) {
 		}
 	}
+
 	void initialize() {
 		// 7개 블록조각 색상
 		this.BColor = new int[] { 0xEE49EE, 0xFF0000, 0xFFFF00, 0x0059FF, 0xFFA500, 0x00FF00, 0x00FFFF };
@@ -220,6 +238,7 @@ public class TetrisWindow extends JFrame implements KeyListener, Runnable {
 		tb.repaint();
 		tb.revalidate();
 	}
+
 
 	void getMinMaxXY(int[][] NowBlock) {
 		minX = minY = 999;

@@ -16,5 +16,7 @@ public class Main {
 		tw.repaint();
 		tw.revalidate();
 		
+		//인트로 객체 생성
+		new Intro();
 	}
 }

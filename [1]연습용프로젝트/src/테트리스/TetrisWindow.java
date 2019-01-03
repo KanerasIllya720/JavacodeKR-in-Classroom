@@ -42,6 +42,7 @@ public class TetrisWindow extends JFrame implements KeyListener, Runnable {
 	int speed = 1000;
 	int cntCombo = 0;
 	Clip clip;
+	int gameLevel = 0;
 
 	// 5단계
 	JMenuBar menuBar;
@@ -50,7 +51,7 @@ public class TetrisWindow extends JFrame implements KeyListener, Runnable {
 
 	public TetrisWindow() {
 		this.setTitle("Tetris 0.01");
-		this.setSize(500, 700);
+		this.setSize(440, 700);
 		this.getContentPane().setBackground(new Color(0x00000000));
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
@@ -95,6 +96,7 @@ public class TetrisWindow extends JFrame implements KeyListener, Runnable {
 					switch (commandName) {
 					case "Start":
 						executeGameStartCommand();
+						playSound("./Sound/BGM_Tetris_Bradinsky.wav");
 						break;
 					case "Stop":
 						executeEndCommand();
@@ -103,12 +105,12 @@ public class TetrisWindow extends JFrame implements KeyListener, Runnable {
 						System.exit(0);
 						break;
 					case "Bradinsky":
-						if(clip!=null && clip.isActive())
+						if (clip != null && clip.isActive())
 							clip.stop();
 						playSound("./Sound/BGM_Tetris_Bradinsky.wav");
 						break;
 					case "Kalinka":
-						if(clip!=null && clip.isActive())
+						if (clip != null && clip.isActive())
 							clip.stop();
 						playSound("./Sound/BGM_Tetris_Kalinka.wav");
 						break;
@@ -239,7 +241,6 @@ public class TetrisWindow extends JFrame implements KeyListener, Runnable {
 		tb.revalidate();
 	}
 
-
 	void getMinMaxXY(int[][] NowBlock) {
 		minX = minY = 999;
 		maxX = maxY = 0;
@@ -298,6 +299,7 @@ public class TetrisWindow extends JFrame implements KeyListener, Runnable {
 
 	private void executeEndCommand() {
 		duringPlay = false;
+		score = 0;
 		while (runThread.isAlive()) {
 			runThread.interrupt();
 		}
@@ -383,20 +385,21 @@ public class TetrisWindow extends JFrame implements KeyListener, Runnable {
 				}
 				if (score >= 500) {
 					speed = 900;
-					tb.JLevel.setText("Level 1");
-				} else if (score >= 100) {
+					gameLevel = 1;
+				} else if (score >= 1000) {
 					speed = 800;
-					tb.JLevel.setText("Level 2");
+					gameLevel = 2;
 				} else if (score >= 1500) {
 					speed = 700;
-					tb.JLevel.setText("Level 3");
+					gameLevel = 3;
 				} else if (score >= 2000) {
 					speed = 600;
-					tb.JLevel.setText("Level 4");
+					gameLevel = 4;
 				} else if (score >= 2500) {
 					speed = 500;
-					tb.JLevel.setText("Level 5");
+					gameLevel = 5;
 				}
+				tb.JLevel.setText("Level " + gameLevel);
 				Thread.sleep(speed);
 			} catch (InterruptedException e) {
 			}

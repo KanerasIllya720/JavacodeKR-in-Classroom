@@ -11,7 +11,7 @@ public class TetrisBoard extends JPanel {
 	TetrisWindow tw;
 	JLabel JScore;
 	JLabel JLevel;
-	int line = 16;
+	int line = 0;
 	boolean det;
 
 	public TetrisBoard() {
@@ -53,22 +53,31 @@ public class TetrisBoard extends JPanel {
 				g.drawRect(410 + j * 20, 25 + i * 20, 20, 20);
 			}
 		}
-		
-		for (int l = 16; l >= 0; l--) {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				g.setColor(new Color(0x00E2E4E6));
+				g.drawRect(410 + j * 20, 25 + i * 20, 20, 20);
+			}
+		}
+		if (tw.duringPlay == false)
+			return;
+		for (int l = 0; l <= 16; l++) {
 			line = l;
-			det = true;
+			det = false;
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
-					if ((tw.NBlock[i][j] > 0) && (tw.TetrisMap[l + i][tw.BlockX + j] > 0)) {
-						det = false;
+					if ((tw.NBlock[i][j] > 0) && ((l + i == 19) || (tw.TetrisMap[l + i+1][tw.BlockX + j] > 0))) {
+						det = true;
+						break;
 					}
 				}
-				if (det == false)
+				if (det == true)
 					break;
 			}
 			if (det == true)
 				break;
 		}
+		// 그림자
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				if (tw.NBlock[i][j] > 0) {
@@ -79,7 +88,7 @@ public class TetrisBoard extends JPanel {
 				}
 			}
 		}
-		
+
 		// 게임판 블록 얹히기
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
